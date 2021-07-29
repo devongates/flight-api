@@ -56,11 +56,11 @@ public class FlightDAO {
 		return flight;
 	}
 	
-	public static void delete(Flight flight) {
+	public static void delete(int id) {
 		try(Connection conn = DriverManager.getConnection(url, username, password)) {
 			final String SQL_DELETE = "delete from flight where id=?";
 			PreparedStatement stmt = conn.prepareStatement(SQL_DELETE);
-			stmt.setInt(1, flight.getId());
+			stmt.setInt(1, id);
 			stmt.executeUpdate();
 		} catch(SQLException e) {
 			e.printStackTrace();
@@ -98,7 +98,7 @@ public class FlightDAO {
 		}
 	}
 	
-	public static void updateById(int id, Flight flight) {
+	public static void update(Flight flight) {
 		try(Connection conn = DriverManager.getConnection(url, username, password)) {
 			final String SQL_UPDATEBYID = "update flight set max_num_passengers=?, num_passengers=?, flight_number=?, from_airport=?, to_airport=?, departure_time=?, arrival_time=? where id=?";
 			PreparedStatement stmt = conn.prepareStatement(SQL_UPDATEBYID);
@@ -110,7 +110,7 @@ public class FlightDAO {
 			stmt.setString(5, flight.getToAirport());
 			stmt.setDate(6, flight.getDepartureTime());
 			stmt.setDate(7, flight.getArrivalTime());
-			stmt.setInt(8, id);
+			stmt.setInt(8, flight.getId());
 			
 			stmt.executeUpdate();
 		} catch(SQLException e) {
@@ -118,7 +118,7 @@ public class FlightDAO {
 		}
 	}
 	
-	public static Flight rsToFlight(ResultSet rs) {
+	private static Flight rsToFlight(ResultSet rs) {
 		try {
 			int id = rs.getInt("id");
 			int maxNumPassengers = rs.getInt("max_num_passengers");
@@ -135,24 +135,5 @@ public class FlightDAO {
 			e.printStackTrace();
 			return null;
 		}
-	}
-	
-	public static void main(String[] args) {
-		Flight flight = new Flight();
-		
-		flight.setId(1003);
-		flight.setMaxNumPassengers(100);
-		flight.setNumPassengers(50);
-		flight.setFlightNumber("fdhsajklfh");
-		flight.setFromAirport("DFW");
-		flight.setToAirport("LAX");
-		flight.setDepartureTime(new Date(1, 2, 3));
-		flight.setArrivalTime(new Date(4, 5, 6));
-		
-		updateById(100, flight);
-		
-		Flight newFlight = findById(100);
-		
-		System.out.println(newFlight);
 	}
 }

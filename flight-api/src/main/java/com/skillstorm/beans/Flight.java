@@ -18,6 +18,19 @@ public class Flight {
 		this.departureTime = departureTime;
 		this.arrivalTime = arrivalTime;
 	}
+	public Flight(int maxNumPassengers, int numPassengers, String flightNumber, String fromAirport, String toAirport,
+			Date departureTime, Date arrivalTime) {
+		super();
+		this.maxNumPassengers = maxNumPassengers;
+		this.numPassengers = numPassengers;
+		this.flightNumber = flightNumber;
+		this.fromAirport = fromAirport;
+		this.toAirport = toAirport;
+		this.departureTime = departureTime;
+		this.arrivalTime = arrivalTime;
+	}
+
+	
 
 	private int id;
 	private int maxNumPassengers;
