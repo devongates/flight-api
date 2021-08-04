@@ -2,6 +2,8 @@ package com.skillstorm.servlet;
 
 import java.io.IOException;
 import java.util.Set;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -17,7 +19,7 @@ import com.skillstorm.exceptions.IllegalRouteException;
 import com.skillstorm.exceptions.UnhandledHttpMethodException;
 import com.skillstorm.util.FlightId;
 
-@WebServlet(urlPatterns="/*")
+@WebServlet(urlPatterns="/api/*")
 public class FrontController extends HttpServlet {
 
 	@Override
@@ -50,7 +52,7 @@ public class FrontController extends HttpServlet {
 		
 		
 		
-		case "/flights":
+		case "/api/flights":
 			switch(method) {
 			case "GET":
 				Set<Flight> flights = FlightsController.getFlights();
@@ -70,7 +72,7 @@ public class FrontController extends HttpServlet {
 			
 			
 			
-		case "/flight":
+		case "/api/flight":
 			switch(method) {
 			case "GET": {
 				FlightId flightId = mapper.readValue(req.getInputStream(), FlightId.class);

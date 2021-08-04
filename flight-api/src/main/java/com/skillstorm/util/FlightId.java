@@ -1,8 +1,9 @@
 package com.skillstorm.util;
 
 public class FlightId {
-	public FlightId() {}
-	
+	public FlightId() {
+	}
+
 	private int id;
 
 	public int getId() {
@@ -17,6 +18,5 @@ public class FlightId {
 	public String toString() {
 		return "FlightId [id=" + id + "]";
 	}
-	
-	
+
 }

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://kit.fontawesome.com/bf1ffbf431.js"
+            crossorigin="anonymous"
+        ></script>
+        <script src="script.js"></script>
+        <title>Flight API</title>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="container">
+                <h1 class="display-1">Flight API</h1>
+                <form id="flight-form">
+                    <div class="row mb-3">
+                        <div class="col-1">
+                            <label for="maxNumPassengers" class="form-label"
+                                >Seats</label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="maxNumPassengers"
+                            />
+                        </div>
+                        <div class="col-1">
+                            <label for="numPassengers" class="form-label"
+                                >Seats Left</label
+                            >
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="numPassengers"
+                            />
+                        </div>
+                        <div class="col-2">
+                            <label for="flightNumber" class="form-label"
+                                >Flight Number</label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="flightNumber"
+                            />
+                        </div>
+                        <div class="col-1">
+                            <label for="fromAirport" class="form-label"
+                                >From</label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="fromAirport"
+                            />
+                        </div>
+                        <div class="col-1">
+                            <label for="toAirport" class="form-label">To</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="toAirport"
+                            />
+                        </div>
+                        <div class="col-2">
+                            <label for="departureTime" class="form-label"
+                                >Departure Time</label
+                            >
+                            <input
+                                type="datetime"
+                                id="departureTime"
+                                class="form-control"
+                            />
+                        </div>
+                        <div class="col-2">
+                            <label for="arrivalTime" class="form-label"
+                                >Arrival Time</label
+                            >
+                            <input
+                                type="datetime"
+                                id="arrivalTime"
+                                class="form-control"
+                            />
+                        </div>
+                        <div class="col-2">
+                            <input
+                                type="submit"
+                                class="btn btn-primary mt-4"
+                                value="Submit"
+                            />
+                        </div>
+                    </div>
+                </form>
+                <h2>Flights</h2>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Max Occupancy</th>
+                            <th scope="col">Current Occupancy</th>
+                            <th scope="col">Flight Number</th>
+                            <th scope="col">Departs From</th>
+                            <th scope="col">Arrives At</th>
+                            <th scope="col">Departure Time</th>
+                            <th scope="col">Arrival Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="flight-table"></tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

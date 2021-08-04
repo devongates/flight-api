@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.skillstorm.beans.Flight;
 
@@ -68,7 +69,7 @@ public class FlightDAO {
 	}
 	
 	public static Set<Flight> findAll() {
-		Set<Flight> flights = new HashSet<>();
+		Set<Flight> flights = new TreeSet<>();
 		try(Connection conn = DriverManager.getConnection(url, username, password)) {
 			final String SQL_FINDALL = "select * from flight";
 			PreparedStatement stmt = conn.prepareStatement(SQL_FINDALL);
