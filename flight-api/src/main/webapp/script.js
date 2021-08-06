@@ -17,7 +17,7 @@ window.onload = () => {
     }
     
     const flightlist = new FlightList
-    const filteredFlightlist = new FlightList
+    let filter = ''
 
     let isEditing = false
     let editId = null
@@ -30,78 +30,60 @@ window.onload = () => {
 //  / _, _/ /___/ /|  / /_/ / /___/ _, _/ 
 // /_/ |_/_____/_/ |_/_____/_____/_/ |_|  
 
-    const render = flights => {
+    const render = () => {
+        const flights = flightlist.getFlights().filter(flight => flight.id.toString().startsWith(filter))
+
         if (isEditing) {
             const btn = document.getElementById('btn-form')
             btn.className = 'btn btn-success mt-4'
             btn.setAttribute('value', 'Edit')
+            document.getElementById('btn-cancel').style.display = ''
         } else {
             const btn = document.getElementById('btn-form')
             btn.className = 'btn btn-primary mt-4'
-            btn.setAttribute('value', 'Submit')
+            btn.setAttribute('value', 'Add')
+            document.getElementById('btn-cancel').style.display = 'none'
         }
+
         const table = document.getElementById('flight-table')
         while (table.firstChild) {
             table.removeChild(table.lastChild)
         }
         for (const flight of flights) {
-            const el_tr = document.createElement("tr")
-            const el_id = document.createElement("th")
-            const el_maxNumPassengers = document.createElement("td")
-            const el_numPassengers = document.createElement("td")
-            const el_flightNumber = document.createElement("td")
-            const el_fromAirport = document.createElement("td")
-            const el_toAirport = document.createElement("td")
-            const el_departureTime = document.createElement("td")
-            const el_arrivalTime = document.createElement("td")
-            
-            const el_btnGroup = document.createElement('div')
-            const el_editBtn = document.createElement('button')
-            const el_delBtn = document.createElement('button')
-            const el_editIcon = document.createElement('i')
-            const el_delIcon = document.createElement('i')
-            
             const {id, maxNumPassengers, numPassengers, flightNumber, fromAirport, toAirport, departureTime, arrivalTime} = flight
             
-            el_id.innerText = id
-            el_maxNumPassengers.innerText = maxNumPassengers
-            el_numPassengers.innerText = numPassengers
-            el_flightNumber.innerText = flightNumber
-            el_fromAirport.innerText = fromAirport
-            el_toAirport.innerText = toAirport
-            el_departureTime.innerText = departureTime
-            el_arrivalTime.innerText = arrivalTime
+            const el_tr = document.createElement("tr")
+            if (id == editId && isEditing) {
+                el_tr.className = 'table-success'
+            } else {
+                el_tr.className = ''
+            }
+
+            el_tr.id = id
+
+            const html = `
+            <th scope="row">${id}</th>
+            <td>${maxNumPassengers}</td>
+            <td>${numPassengers}</td>
+            <td>${flightNumber}</td>
+            <td>${fromAirport}</td>
+            <td>${toAirport}</td>
+            <td>${new Date(departureTime).toISOString().slice(0,10)}</td>
+            <td>${new Date(arrivalTime).toISOString().slice(0,10)}</td>
+            <div class="btn-group" role="group">
+                <button class="btn btn-success" id="btn-edit">
+                    <i class="far fa-edit" id="btn-edit" aria-hidden="false"></i>
+                </button>
+                <button class="btn btn-danger" id="btn-delete">
+                    <i class="far fa-trash-alt" id="btn-delete" aria-hidden="false"></i>
+                </button>
+            </div>
+            `
             
-            el_id.scope = 'row'
-            
-            el_editIcon.className = 'far fa-edit'
-            el_editIcon.id = 'btn-edit'
-            el_delIcon.className = 'far fa-trash-alt'
-            el_delIcon.id = 'btn-delete'
-            
-            el_editBtn.className = 'btn btn-primary'
-            el_delBtn.className = 'btn btn-danger'
-            el_delBtn.id = 'btn-delete'
-            el_editBtn.id = 'btn-edit'
-            el_editBtn.appendChild(el_editIcon)
-            el_delBtn.appendChild(el_delIcon)
-            
-            el_btnGroup.className = 'btn-group'
-            el_btnGroup.setAttribute('role', 'group')
-            el_btnGroup.appendChild(el_editBtn)
-            el_btnGroup.appendChild(el_delBtn)
-            
-            el_tr.appendChild(el_id)
-            el_tr.appendChild(el_maxNumPassengers)
-            el_tr.appendChild(el_numPassengers)
-            el_tr.appendChild(el_flightNumber)
-            el_tr.appendChild(el_fromAirport)
-            el_tr.appendChild(el_toAirport)
-            el_tr.appendChild(el_departureTime)
-            el_tr.appendChild(el_arrivalTime)
-            el_tr.appendChild(el_btnGroup)
+            el_tr.insertAdjacentHTML('beforeend', html)
             
             table.appendChild(el_tr)
+
         }
     }
 
@@ -122,8 +104,7 @@ window.onload = () => {
             for (const flight of flights) {
                 flightlist.append(flight)
             }
-            filteredFlightlist.setFlights(flightlist.getFlights())
-            render(flightlist.getFlights())
+            render()
         }
     }
     xhr.open('GET', '/flight-api/api/flights')
@@ -147,8 +128,8 @@ window.onload = () => {
         const flightNumber = document.getElementById('flightNumber').value
         const fromAirport = document.getElementById('fromAirport').value
         const toAirport = document.getElementById('toAirport').value
-        const departureTime = document.getElementById('departureTime').value
-        const arrivalTime = document.getElementById('arrivalTime').value
+        const departureTime = new Date(document.getElementById('departureTime').value).toUTCString()
+        const arrivalTime = new Date(document.getElementById('arrivalTime').value).toUTCString()
         
         const flight = {maxNumPassengers, numPassengers, flightNumber, fromAirport, toAirport, departureTime, arrivalTime}
         
@@ -162,7 +143,7 @@ window.onload = () => {
                     flights[idx] = editFlight
                     flightlist.setFlights(flights)
                     isEditing = false
-                    render(flightlist.getFlights())
+                    render()
                 }
             }
             
@@ -174,7 +155,7 @@ window.onload = () => {
                 if (xhr.readyState === 4) {
                     respFlight = JSON.parse(xhr.responseText)
                     flightlist.setFlights([...flightlist.getFlights(), respFlight])
-                    render(flightlist.getFlights())
+                    render()
                     console.log(respFlight);
                 }
             }
@@ -202,7 +183,7 @@ window.onload = () => {
             
             const tr = e.target.closest('tr')
             const cols = tr.children
-            
+
             const id = cols[0].innerText
             const maxNumPassengers = cols[1].innerText
             const numPassengers = cols[2].innerText
@@ -220,7 +201,7 @@ window.onload = () => {
             isEditing = false
             document.getElementById('flight-form').reset()
             const tr = e.target.closest('tr')
-            const id = tr.firstChild.innerText
+            const id = tr.children[0].innerText
             const flightId = {id}
             deleteFlight(flightId)
         }
@@ -242,8 +223,7 @@ window.onload = () => {
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 flightlist.setFlights(flightlist.getFlights().filter(flight => flight.id != flightId.id))
-                console.log(flightlist.getFlights());
-                render(flightlist.getFlights())
+                render()
             }
         }
 
@@ -265,7 +245,7 @@ window.onload = () => {
     const editFlight = flight => {
         isEditing = true
         editId = flight.id
-        render(flightlist.getFlights())
+        render()
 
         document.getElementById('maxNumPassengers').value = flight.maxNumPassengers
         document.getElementById('numPassengers').value = flight.numPassengers
@@ -277,5 +257,9 @@ window.onload = () => {
     }
 
     // END EDIT
+
+    document.getElementById('search').addEventListener('input', e => {
+        filter = document.getElementById('search').value.toString()
+        render()
+    })
 }
-    

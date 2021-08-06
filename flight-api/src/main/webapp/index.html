@@ -76,7 +76,7 @@
                                 >Departure Time</label
                             >
                             <input
-                                type="datetime"
+                                type="date"
                                 id="departureTime"
                                 class="form-control"
                             />
@@ -86,22 +86,33 @@
                                 >Arrival Time</label
                             >
                             <input
-                                type="datetime"
+                                type="date"
                                 id="arrivalTime"
                                 class="form-control"
                             />
                         </div>
-                        <div class="col-2">
+                        <div class="col-1">
                             <input
                                 type="submit"
-                                class="btn btn-primary mt-4"
-                                value="Submit"
+                                class="btn btn-primary"
+                                value="Add"
                                 id="btn-form"
                             />
+                        </div>
+                        <div class="col-1">
+                            <button class="btn mt-4" id="btn-cancel">
+                                Cancel
+                            </button>
                         </div>
                     </div>
                 </form>
                 <h2>Flights</h2>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="search"
+                    placeholder="Search by ID"
+                />
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
